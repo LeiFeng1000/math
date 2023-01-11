@@ -129,7 +129,7 @@ public:
      * @brief       计算矩阵的行列式。要求：矩阵是方阵，否者返回值是无效的
      * @return      矩阵的行列式
      */
-    std::optional<det<T>> det() const noexcept    //const
+    std::optional<math::det<T>> det() const noexcept    //const
     {
         using namespace std;
 

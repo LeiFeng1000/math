@@ -110,7 +110,7 @@ public:
     */
    template<std::constructible_from<T> TF>
    det(size_t N,std::initializer_list<TF> const& data)
-    : _nt(N,N,data)
+        : _nt(N,N,data)
     {
         
     }
@@ -124,7 +124,7 @@ public:
     */
    template<std::constructible_from<T> TF>
    det(size_t N,std::vector<TF> const& data)
-    : _nt(N,N,data)
+        : _nt(N,N,data)
     {
         
     }
@@ -256,7 +256,7 @@ public:
     }
 
     /**
-     * @brief       计算：行列式的M(i,j)
+     * @brief       计算：行列式的余子式
      * @param i     指定行元
      * @param j     指定列元
      * @return      计算结果。若(i,j)是无效的，则返回值是无效的
@@ -289,8 +289,14 @@ public:
         }
         return result;
     }
-    //计算行列式(i,j)元的代数余子式
-    std::optional<det> algebraic_complement_minor(size_t i,size_t j) const
+
+    /**
+     * @brief       计算：代数余子式
+     * @param i     指定行
+     * @param j     指定列
+     * @return      计算结果。若i或j无效，则，返回值无效.
+    */
+    std::optional<det> A_i_j(size_t i,size_t j) const
     {
         using namespace std;
         using namespace sequence;
@@ -367,7 +373,7 @@ public:
             {
                 for (size_t r2{r1 + 1}; r2 <= this->get_N(); ++r2)
                 {
-                    if (this->get_element(r1,r2).value() != 0)
+                    if (this->get_element(r2,r1).value() != 0)
                     {
                         this->swap_row(r1,r2);
                         break;
