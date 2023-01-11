@@ -88,22 +88,115 @@ public:
     }
 
     /**
+     * @brief       判断：矩阵是否为行向量
+     * @return      true,为行向量；false，为非行向量
+    */
+   bool is_single_row() const noexcept
+   {
+        return this->get_M() == 1;
+   }
+
+   /**
+    * @brief        判断：矩阵是否为列向量
+    * @return       true，为列向量；false，为非列向量
+   */
+    bool is_single_column() const noexcept 
+    {
+        return this->get_N() == 1;
+    }
+
+    /**
+     * @brief   判断：矩阵是否为对角矩阵
+     * @return  true,为对角矩阵；false,为非对角矩阵
+    */
+    bool is_diagonal() const noexcept
+    {
+        if (!this->is_square())
+        {
+            return false;
+        }
+
+        for (size_t i{1}; i <= this->get_M(); ++i)
+        {
+            for (size_t j{1}; j <= this->get_N(); ++j)
+            {
+                if (i == j)
+                {
+                    continue;
+                }
+                if (*this->get_element(i,j) != 0)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @brief   判断：矩阵是否为单位矩阵
+     * @return  true,为单位矩阵；false，为非单位矩阵
+    */
+    bool is_identity() const noexcept 
+    {
+        if (!this->is_square())
+        {
+            return false;
+        }
+
+        for (size_t i{1}; i <= this->get_M(); ++i)
+        {
+            for (size_t j{1}; j <= this->get_N(); ++j)
+            {
+                if (i == j and this->get_element(i,j).value() == 1)
+                {
+                    continue;
+                }
+                else
+                {
+                    return false;
+                }
+
+                if (this->get_element(i,j).value() != 0)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * @brief   判断：矩阵是否为对称阵
+     * @return  true，为对称阵；false,为非对称阵
+    */
+    bool is_symmetric() const noexcept 
+    {
+        if (!this->is_square())
+        {
+            return false;
+        }
+
+        for (size_t i{1}; i <= this->get_M(); ++i)
+        {
+            for (size_t j{1}; j <= this->get_N(); ++j)
+            {
+                if (this->get_element(i,j) != this->get_element(j,i))
+                    return false;
+            }
+        }
+        return true;
+    }
+    /**
      * @brief       计算*this + right
      * @param right 右操作数。要求: right 和 *this必须是同型矩阵，否者返回值是无效的
      * @return      计算结果
     */
     std::optional<matrix> operator+(matrix const& right) noexcept   //const
     {
-        if (this->get_M() != right.get_M() or this->get_N() != right.get_N())
-            return {};
+        auto result {*this};
+        result += right;
 
-        auto result{*this};
-
-        using namespace sequence;
-        for (size_t i{1};i <= result.get_M();++i)
-        {
-            result->set_row(i,*(*this->get_row(i) + *right.get_row(i)));
-        }
         return result;
     }
 

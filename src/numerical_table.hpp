@@ -161,7 +161,7 @@ public:
      * @brief     判断矩阵是否为方阵
      * @return    true,为方阵；false,非方阵
      */
-    bool square_matrix() const noexcept 
+    bool is_square() const noexcept 
     {
         return get_M() == get_N();
     }
