@@ -226,7 +226,7 @@ public:
     {
         using namespace std;
 
-        if (!this->square_matrix())
+        if (!this->is_square())
             return {};
 
         math::det<T> result(this->get_M(),{T{}});
@@ -297,7 +297,7 @@ public:
     }
 
     /**
-     * @brief       计算矩阵的伴随矩阵。要求：矩阵是方阵，否则返回值是无效的；要求：矩阵不是1维的，否则返回值是无效的。该函数使用多线程计算，计算期间使用共享锁锁定
+     * @brief       计算矩阵的伴随矩阵。要求：矩阵是方阵，否则返回值是无效的；要求：矩阵不是1维的，否则返回值是无效的。该函数使用多线程计算
      * @return      矩阵的伴随矩阵
      */
     std::optional<matrix> adjoint() const
@@ -320,7 +320,7 @@ public:
             for (size_t j{1};j <= this->get_N();++j)
             {
                 arr_thread.push_back(jthread([&](size_t r,size_t c){
-                                         auto ttdet = tdet.m_i_j(r,c);
+                                         auto ttdet = tdet.A_i_j(r,c);
                                          result.set_element(r,c,ttdet.value().general_calculate());
                                      },i,j));
             }
@@ -342,9 +342,16 @@ public:
         auto vdet = this->det();
         if (!vdet)
             return {};
+        
+        auto v_vdet { vdet.elimination_calculate() };
+        if (v_vdet == 0)
+        {
+            return {};
+        }
 
         auto adjoint_matrix =  this->adjoint().value();
-        return adjoint_matrix * (1 / T(vdet->general_calculate()));
+        adjoint_matrix *= 1 / v_vdet;
+        return adjoint_matrix;
     }
 
     /**

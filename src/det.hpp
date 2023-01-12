@@ -261,7 +261,7 @@ public:
      * @param j     指定列元
      * @return      计算结果。若(i,j)是无效的，则返回值是无效的
      */
-    std::optional<det> m_i_j(size_t i,size_t j) const noexcept
+    std::optional<det> M_i_j(size_t i,size_t j) const noexcept
     {
         using namespace std;
         using namespace sequence;
@@ -301,7 +301,7 @@ public:
         using namespace std;
         using namespace sequence;
 
-        auto result = this->m_i_j(i,j).value();
+        auto result = this->M_i_j(i,j).value();
         if ((i + j) % 2 == 1)
             for (size_t row{1}; row <= result.get_N(); ++row)
                 result.set_row(row,(*result.get_row(row) * T(-1)));
