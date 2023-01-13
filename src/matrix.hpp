@@ -343,15 +343,23 @@ public:
         if (!vdet)
             return {};
         
-        auto v_vdet { vdet.elimination_calculate() };
+        auto v_vdet { vdet->elimination_calculate() };
         if (v_vdet == 0)
         {
             return {};
         }
 
-        auto adjoint_matrix =  this->adjoint().value();
-        adjoint_matrix *= 1 / v_vdet;
-        return adjoint_matrix;
+        matrix result(this->get_M(),this->get_N(),{T{}});
+
+        for (size_t i{1}; i <= this->get_M(); ++i)
+        {
+            for (size_t j{1}; j <= this->get_N();++j)
+            {
+                result.set_element(j,i,vdet->A_i_j(i,j).value().elimination_calculate());
+            }
+        }
+        result *= (1/v_vdet);
+        return result;
     }
 
     /**
@@ -469,6 +477,28 @@ public:
                     this->row_add_times_row(j,i,-k);
                 }
             }
+        }
+    }
+
+    /**
+     * @brief       组合：两个矩阵，即(*this,right)
+     * @param right 有操作数。要求：两个矩阵的行数相同
+     * @return      组合结果
+    */
+    std::optional<matrix> combination(matrix const& right) const noexcept 
+    {
+        if (this->get_M() != right.get_M())
+            return {};
+
+        matrix result(this->get_M(),this->get_N() + right.get_N(),{T{}});
+        for (size_t row {1}; row <= result->get_M(); ++row)
+        {
+            auto l1 { *this->get_row(row) };
+            auto l2 { *right.get_row(row) };
+
+            l1.append(l2.begin(),l2.end());
+
+            result.set_row(row,l1);
         }
     }
 };

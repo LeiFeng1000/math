@@ -25,5 +25,9 @@ int main()
     cout << A_21_det_A.elimination_calculate() << '\t' << A_22_det_A.elimination_calculate() << '\t' << A_23_det_A.elimination_calculate() << endl;
     cout << A_31_det_A.elimination_calculate() << '\t' << A_32_det_A.elimination_calculate() << '\t' << A_23_det_A.elimination_calculate() << endl;
 
+    auto B = A.inverse().value();
+    B.operator<<(cout) << endl;
+    (A * B).value().operator<<(cout)<< endl;
+
     return 0;
 }

@@ -104,9 +104,27 @@ namespace math
             result *= right;
             return result;
         }
+
+        /**
+         * @brief       获得：复数的实部
+         * @return      复数的实部
+        */
+        double x() const noexcept
+        {
+            return _x;
+        }
+
+        /**
+         * @brief   获得： 复数的虚部
+         * @return  复数的虚部
+        */
+        double y() const noexcept 
+        {
+            return _y;
+        }
     private:
         double  _x,     //实部
                 _y;     //虚部
-    }
+    };
 }
 #endif  //COMPLEX_HPP

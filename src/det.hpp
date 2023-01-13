@@ -303,8 +303,7 @@ public:
 
         auto result = this->M_i_j(i,j).value();
         if ((i + j) % 2 == 1)
-            for (size_t row{1}; row <= result.get_N(); ++row)
-                result.set_row(row,(*result.get_row(row) * T(-1)));
+            result.set_row(1,(*result.get_row(1) * T(-1)));
 
         return result;
     }
