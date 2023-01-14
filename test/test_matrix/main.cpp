@@ -29,5 +29,15 @@ int main()
     B.operator<<(cout) << endl;
     (A * B).value().operator<<(cout)<< endl;
 
+    matrix<double> m2{4,5,{
+            2,1,4,3,
+            -1,1,-6,6,
+            -1,-2,2,-9,
+            1,1,-2,7,
+            2,4,4,9}};
+    m2.operator<<(cout)<< endl;
+    m2.row_step();
+    m2.operator<<(cout)<<endl;
+
     return 0;
 }

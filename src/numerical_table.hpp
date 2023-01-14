@@ -18,12 +18,15 @@
 #include <mutex>
 #include <shared_mutex>
 
+//googletest
+#include <gtest/gtest.h>
+
 #include "sequence.hpp"
 
 namespace math
 {
 /**
- * @brief @class numerical_table        实现一个数表,以列主序。类被设计为线程安全的，读取时采用 std::shared_lock 进行锁；写入时采用 std::lock_guard 进行锁
+ * @brief @class numerical_table        实现一个数表,以列主序。
  * @tparam T 数据类型
  *
  * @fn void set_M(size_t M);            //设置数表的行数

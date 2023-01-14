@@ -410,7 +410,7 @@ public:
 
         using namespace sequence;
 
-        this->set_row(row_1,*(*this->get_row(row_1) + (*this->get_row(row_2) * T(k))));
+        this->set_row(row_1,*(*this->get_row(row_1) + *this->get_row(row_2) * T(k)));
     }
 
     /**
@@ -499,6 +499,71 @@ public:
             l1.append(l2.begin(),l2.end());
 
             result.set_row(row,l1);
+        }
+    }
+
+    /**
+     * @brief       转换：行阶梯矩阵
+     */
+    void row_step() noexcept
+    {
+        using namespace math::sequence;
+
+        for (size_t i{1},j{1}; i <= this->get_M() and j <= this->get_N();)
+        {
+            //查找首元素非0的行
+            if (*this->get_element(i,j) == 0)
+            {
+                for (size_t k{i+1};k <= this->get_M(); ++k)
+                {
+                    if (*this->get_element(k,j) != 0)
+                    {
+                        this->swap_row(k,i);
+                        break;
+                    }
+                }
+                if (*this->get_element(i,j) == 0)
+                {
+                    ++j;
+                    continue;
+                }
+            }
+
+            //将首元素归一化
+            this->set_row(i,(this->get_row(i).value() * (1 / this->get_element(i,j).value())));
+
+            for (size_t k{i + 1}; k <= this->get_M(); ++k)
+            {
+                auto times { - *this->get_element(k,j) };
+                if (times == 0)
+                    continue;
+
+                this->row_add_times_row(k,i,times);
+            }
+
+            ++i;
+            ++j;
+        }
+
+        //归零
+        for (size_t i{this->get_M()}; i > 0; --i)
+        {
+            //查找首个不为0的元素
+            size_t j{i};
+            for (;j <= this->get_M(); ++j)
+            {
+                if (*this->get_element(i,j) != 0)
+                    break;
+            }
+            if (*this->get_element(i,j) == 0)
+                continue;
+
+            for (size_t k {i-1};k > 0; --k)
+            {
+                auto times { - *this->get_element(k,j) };
+
+                this->row_add_times_row(k,i,times);
+            }
         }
     }
 };
